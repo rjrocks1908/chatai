@@ -181,65 +181,65 @@ class ArtifactService:
             if artifact.session_id == session_id
         ]
 
-    def get_artifacts_by_message(self, message_id: str) -> List[CodeArtifact]:
-        """Get all artifacts for a specific message"""
-        return [
-            artifact
-            for artifact in self.artifacts.values()
-            if artifact.message_id == message_id
-        ]
+    # def get_artifacts_by_message(self, message_id: str) -> List[CodeArtifact]:
+    #     """Get all artifacts for a specific message"""
+    #     return [
+    #         artifact
+    #         for artifact in self.artifacts.values()
+    #         if artifact.message_id == message_id
+    #     ]
 
-    def delete_artifact(self, artifact_id: str) -> bool:
-        """Delete an artifact"""
-        if artifact_id in self.artifacts:
-            del self.artifacts[artifact_id]
-            return True
-        return False
+    # def delete_artifact(self, artifact_id: str) -> bool:
+    #     """Delete an artifact"""
+    #     if artifact_id in self.artifacts:
+    #         del self.artifacts[artifact_id]
+    #         return True
+    #     return False
 
-    def update_artifact(
-        self, artifact_id: str, updates: Dict
-    ) -> Optional[CodeArtifact]:
-        """Update an artifact"""
-        if artifact_id not in self.artifacts:
-            return None
+    # def update_artifact(
+    #     self, artifact_id: str, updates: Dict
+    # ) -> Optional[CodeArtifact]:
+    #     """Update an artifact"""
+    #     if artifact_id not in self.artifacts:
+    #         return None
 
-        artifact = self.artifacts[artifact_id]
-        for key, value in updates.items():
-            if hasattr(artifact, key):
-                setattr(artifact, key, value)
+    #     artifact = self.artifacts[artifact_id]
+    #     for key, value in updates.items():
+    #         if hasattr(artifact, key):
+    #             setattr(artifact, key, value)
 
-        return artifact
+    #     return artifact
 
-    def get_artifact_stats(self) -> Dict:
-        """Get statistics about artifacts"""
-        if not self.artifacts:
-            return {
-                "total_artifacts": 0,
-                "by_type": {},
-                "by_language": {},
-                "runnable_count": 0,
-            }
+    # def get_artifact_stats(self) -> Dict:
+    #     """Get statistics about artifacts"""
+    #     if not self.artifacts:
+    #         return {
+    #             "total_artifacts": 0,
+    #             "by_type": {},
+    #             "by_language": {},
+    #             "runnable_count": 0,
+    #         }
 
-        by_type = {}
-        by_language = {}
-        runnable_count = 0
+    #     by_type = {}
+    #     by_language = {}
+    #     runnable_count = 0
 
-        for artifact in self.artifacts.values():
-            # Count by type
-            type_name = artifact.type.value
-            by_type[type_name] = by_type.get(type_name, 0) + 1
+    #     for artifact in self.artifacts.values():
+    #         # Count by type
+    #         type_name = artifact.type.value
+    #         by_type[type_name] = by_type.get(type_name, 0) + 1
 
-            # Count by language
-            language = artifact.language
-            by_language[language] = by_language.get(language, 0) + 1
+    #         # Count by language
+    #         language = artifact.language
+    #         by_language[language] = by_language.get(language, 0) + 1
 
-            # Count runnable
-            if artifact.is_runnable:
-                runnable_count += 1
+    #         # Count runnable
+    #         if artifact.is_runnable:
+    #             runnable_count += 1
 
-        return {
-            "total_artifacts": len(self.artifacts),
-            "by_type": by_type,
-            "by_language": by_language,
-            "runnable_count": runnable_count,
-        }
+    #     return {
+    #         "total_artifacts": len(self.artifacts),
+    #         "by_type": by_type,
+    #         "by_language": by_language,
+    #         "runnable_count": runnable_count,
+    #     }

@@ -1,6 +1,6 @@
-import { Send } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
-import { cn } from '../../utils/cn';
+import { Send } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { cn } from "../../utils/cn";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -11,17 +11,20 @@ interface ChatInputProps {
 export const ChatInput: React.FC<ChatInputProps> = ({
   onSendMessage,
   disabled = false,
-  placeholder = "Type your message here..."
+  placeholder = "Type your message here...",
 }) => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [isComposing, setIsComposing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.min(
+        textareaRef.current.scrollHeight,
+        200
+      )}px`;
     }
   }, [message]);
 
@@ -29,16 +32,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     e.preventDefault();
     if (message.trim() && !disabled && !isComposing) {
       onSendMessage(message.trim());
-      setMessage('');
+      setMessage("");
       // Reset textarea height
       if (textareaRef.current) {
-        textareaRef.current.style.height = 'auto';
+        textareaRef.current.style.height = "auto";
       }
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
@@ -55,8 +58,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const canSend = message.trim() && !disabled && !isComposing;
 
   return (
-    <form onSubmit={handleSubmit} className="border-t border-gray-200 bg-white p-4">
-      <div className="flex items-end gap-3">
+    <form
+      onSubmit={handleSubmit}
+      className="border-t border-gray-200 bg-white p-4"
+    >
+      <div className="flex items-center gap-3">
         {/* Input Area */}
         <div className="flex-1 relative">
           <textarea
@@ -77,7 +83,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             )}
             rows={1}
           />
-          
         </div>
 
         {/* Send Button */}
@@ -87,7 +92,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           className={cn(
             "flex items-center justify-center w-10 h-10 rounded-lg transition-colors",
             canSend
-              ? "bg-blue-600 hover:bg-blue-700 text-white"
+              ? "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"
           )}
         >
@@ -101,4 +106,4 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       </div>
     </form>
   );
-}; 
+};

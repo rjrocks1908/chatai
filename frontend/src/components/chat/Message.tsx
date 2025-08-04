@@ -66,7 +66,7 @@ export const Message: React.FC<MessageProps> = ({
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeHighlight]}
               components={{
-                code({ node, inline, className, children, ...props }) {
+                code({ inline, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || "");
                   return !inline && match ? (
                     <pre className="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto">

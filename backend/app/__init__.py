@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+import traceback
 
 from app.config import get_settings
 from app.api.v1.api import api_router
@@ -51,6 +52,7 @@ def create_app():
     @app.exception_handler(APIException)
     async def api_exception_handler(request, exc: APIException):
         """Handle custom API exceptions"""
+        traceback.print_exc()
         return JSONResponse(
             status_code=exc.status_code,
             content={
@@ -63,6 +65,7 @@ def create_app():
     @app.exception_handler(HTTPException)
     async def http_exception_handler(request, exc: HTTPException):
         """Handle HTTP exceptions"""
+        traceback.print_exc()
         return JSONResponse(
             status_code=exc.status_code,
             content={
@@ -75,6 +78,7 @@ def create_app():
     @app.exception_handler(Exception)
     async def general_exception_handler(request, exc: Exception):
         """Handle general exceptions"""
+        traceback.print_exc()
         if settings.debug:
             # In debug mode, return detailed error info
             return JSONResponse(

@@ -1,6 +1,5 @@
 import backendInstance from "../axios/backend";
 
-// Health check
 export async function healthCheck(): Promise<{
   status: string;
   version: string;

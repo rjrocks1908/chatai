@@ -1,7 +1,9 @@
-from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
 from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from app.utils.validators import InputValidator
+from pydantic import BaseModel, Field, field_validator
 
 
 class MessageRole(str, Enum):
@@ -19,9 +21,14 @@ class ChatMessage(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    message: str
-    session_id: str
-    stream: bool = True
+    message: str = Field(..., min_length=1, max_length=10000)
+    session_id: str = Field(..., min_length=1, max_length=100)
+    stream: bool = Field(default=True)
+
+    @field_validator("message", mode="after")
+    @classmethod
+    def sanitize_message_content(cls, value: str) -> str:
+        return InputValidator.sanitize_message_content(value)
 
 
 class ChatResponse(BaseModel):
