@@ -2,13 +2,13 @@ import React from "react";
 import { CodeArtifact as CodeArtifactComponent } from "./CodeArtifact";
 import { cn } from "../../utils/cn";
 import type { CodeArtifact } from "../../types/chat";
+import { X } from "lucide-react";
 
 interface ArtifactsPanelProps {
   artifacts: CodeArtifact[];
   showArtifacts: boolean;
   onClose: () => void;
   onPreviewArtifact: (artifact: CodeArtifact) => void;
-  onPreviewAllArtifacts: () => void;
   onDownloadAllArtifacts: () => void;
 }
 
@@ -17,15 +17,8 @@ export const ArtifactsPanel: React.FC<ArtifactsPanelProps> = ({
   showArtifacts,
   onClose,
   onPreviewArtifact,
-  onPreviewAllArtifacts,
   onDownloadAllArtifacts,
 }) => {
-  const hasFrontendArtifacts = artifacts.some((artifact) =>
-    ["html", "css", "javascript", "react", "jsx", "tsx"].includes(
-      artifact.language.toLowerCase()
-    )
-  );
-
   return (
     <div
       className={cn(
@@ -44,7 +37,7 @@ export const ArtifactsPanel: React.FC<ArtifactsPanelProps> = ({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
-            ×
+            <X className="w-4 h-4 cursor-pointer" />
           </button>
         </div>
 
@@ -52,15 +45,6 @@ export const ArtifactsPanel: React.FC<ArtifactsPanelProps> = ({
           <span className="text-sm text-gray-500">
             {artifacts.length} artifact{artifacts.length !== 1 ? "s" : ""}
           </span>
-
-          {hasFrontendArtifacts && (
-            <button
-              onClick={onPreviewAllArtifacts}
-              className="text-sm text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
-            >
-              Preview All
-            </button>
-          )}
 
           <button
             onClick={onDownloadAllArtifacts}
@@ -82,4 +66,4 @@ export const ArtifactsPanel: React.FC<ArtifactsPanelProps> = ({
       </div>
     </div>
   );
-}; 
+};

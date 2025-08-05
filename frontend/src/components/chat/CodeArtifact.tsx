@@ -4,6 +4,7 @@ import {
   getFileExtension,
   downloadFile,
   copyToClipboard,
+  isFrontendCode,
 } from "../../utils/helpers";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -41,10 +42,7 @@ export const CodeArtifact: React.FC<CodeArtifactProps> = ({
     }
   };
 
-  const canPreview =
-    artifact.language.toLowerCase() === "html" ||
-    artifact.language.toLowerCase() === "css" ||
-    artifact.language.toLowerCase() === "javascript";
+  const canPreview = isFrontendCode(artifact);
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
@@ -64,7 +62,7 @@ export const CodeArtifact: React.FC<CodeArtifactProps> = ({
           {canPreview && (
             <button
               onClick={handlePreview}
-              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors cursor-pointer"
               title="Preview"
             >
               <Eye className="w-4 h-4" />
@@ -73,7 +71,7 @@ export const CodeArtifact: React.FC<CodeArtifactProps> = ({
 
           <button
             onClick={handleCopy}
-            className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors"
+            className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors cursor-pointer"
             title="Copy to clipboard"
           >
             {copied ? (
@@ -85,7 +83,7 @@ export const CodeArtifact: React.FC<CodeArtifactProps> = ({
 
           <button
             onClick={handleDownload}
-            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors cursor-pointer"
             title="Download"
           >
             <Download className="w-4 h-4" />

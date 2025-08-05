@@ -67,7 +67,7 @@ export const CodePreview: React.FC<CodePreviewProps> = ({
             <button
               onClick={refreshPreview}
               disabled={isLoading}
-              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50"
+              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50 cursor-pointer"
               title="Refresh preview"
             >
               <RefreshCw
@@ -77,7 +77,7 @@ export const CodePreview: React.FC<CodePreviewProps> = ({
 
             <button
               onClick={openInNewTab}
-              className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors"
+              className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors cursor-pointer"
               title="Open in new tab"
             >
               <ExternalLink className="w-4 h-4" />
@@ -85,7 +85,7 @@ export const CodePreview: React.FC<CodePreviewProps> = ({
 
             <button
               onClick={onClose}
-              className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+              className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors cursor-pointer"
               title="Close preview"
             >
               <X className="w-4 h-4" />

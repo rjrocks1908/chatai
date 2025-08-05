@@ -1,23 +1,46 @@
-import React from "react";
-import type { ChatMessage } from "../../types/chat";
+import React, { useEffect, useState } from "react";
+import type { ChatMessage, CodeArtifact } from "../../types/chat";
 import { cn } from "../../utils/cn";
-import { formatTimestamp } from "../../utils/helpers";
+import {
+  downloadFile,
+  formatTimestamp,
+  getFileExtension,
+  isFrontendCode,
+} from "../../utils/helpers";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
-import { User, Bot } from "lucide-react";
+import { User, Bot, Code, Download, Eye } from "lucide-react";
+import { useAppSelector } from "../../store/hooks";
 
 interface MessageProps {
   message: ChatMessage;
   isStreaming?: boolean;
+  onPreviewArtifact?: (artifact: CodeArtifact) => void;
 }
 
 export const Message: React.FC<MessageProps> = ({
   message,
   isStreaming = false,
+  onPreviewArtifact,
 }) => {
   const isUser = message.role === "user";
   const isAssistant = message.role === "assistant";
+
+  const { messageArtifacts } = useAppSelector((state) => state.chat);
+  const [isPreviewed, setIsPreviewed] = useState(false);
+
+  useEffect(() => {
+    if (messageArtifacts[message.id]) {
+      setIsPreviewed(messageArtifacts[message.id].some(isFrontendCode));
+    }
+  }, [messageArtifacts, message.id]);
+
+  const handleDownload = (artifact: CodeArtifact) => {
+    const extension = getFileExtension(artifact.language);
+    const filename = `${artifact.title || "code"}.${extension}`;
+    downloadFile(artifact.content, filename);
+  };
 
   return (
     <div
@@ -120,6 +143,56 @@ export const Message: React.FC<MessageProps> = ({
             </div>
           )}
         </div>
+
+        {/* Artifacts Section */}
+        {messageArtifacts[message.id] && (
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center gap-2 mb-2">
+              <Code className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-blue-900">
+                Generated Code ({messageArtifacts[message.id].length})
+              </span>
+            </div>
+            <div className="space-y-2">
+              {messageArtifacts[message.id].map((artifact) => (
+                <div
+                  key={artifact.id}
+                  className="flex items-center justify-between p-2 bg-white rounded border border-blue-100"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-gray-900 truncate">
+                      {artifact.title || `Code (${artifact.language})`}
+                    </div>
+                    {artifact.description && (
+                      <div className="text-xs text-gray-500 truncate">
+                        {artifact.description}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1 ml-2">
+                    {onPreviewArtifact && isPreviewed && (
+                      <button
+                        onClick={() => onPreviewArtifact(artifact)}
+                        className="p-1 text-blue-600 hover:text-blue-700 hover:bg-blue-100 rounded transition-colors cursor-pointer"
+                        title="Preview"
+                      >
+                        <Eye className="w-3 h-3" />
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => handleDownload(artifact)}
+                      className="p-1 text-green-600 hover:text-green-700 hover:bg-green-100 rounded transition-colors cursor-pointer"
+                      title="Download"
+                    >
+                      <Download className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

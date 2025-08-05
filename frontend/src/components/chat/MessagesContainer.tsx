@@ -1,18 +1,20 @@
 import React, { useRef, useEffect } from "react";
 import { Message } from "./Message";
 import { WelcomeMessage } from "./WelcomeMessage";
-import type { ChatMessage } from "../../types/chat";
+import type { ChatMessage, CodeArtifact } from "../../types/chat";
 
 interface MessagesContainerProps {
   messages: ChatMessage[];
   currentStreamingMessage: ChatMessage | null;
   isLoading: boolean;
+  onPreviewArtifact?: (artifact: CodeArtifact) => void;
 }
 
 export const MessagesContainer: React.FC<MessagesContainerProps> = ({
   messages,
   currentStreamingMessage,
   isLoading,
+  onPreviewArtifact,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -26,11 +28,19 @@ export const MessagesContainer: React.FC<MessagesContainerProps> = ({
       {messages.length === 0 && !isLoading && <WelcomeMessage />}
 
       {messages.map((message) => (
-        <Message key={message.id} message={message} />
+        <Message 
+          key={message.id} 
+          message={message} 
+          onPreviewArtifact={onPreviewArtifact}
+        />
       ))}
 
       {currentStreamingMessage && (
-        <Message message={currentStreamingMessage} isStreaming={true} />
+        <Message 
+          message={currentStreamingMessage} 
+          isStreaming={true}
+          onPreviewArtifact={onPreviewArtifact}
+        />
       )}
 
       <div ref={messagesEndRef} />

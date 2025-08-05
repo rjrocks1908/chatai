@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { ChatMessage, CodeArtifact } from '../../types/chat';
-import { generateSessionId } from '../../utils/helpers';
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { ChatMessage, CodeArtifact } from "../../types/chat";
+import { generateSessionId } from "../../utils/helpers";
 
 interface ChatState {
   messages: ChatMessage[];
@@ -9,6 +9,7 @@ interface ChatState {
   sessionId: string;
   currentStreamingMessage: ChatMessage | null;
   artifacts: CodeArtifact[];
+  messageArtifacts: Record<string, CodeArtifact[]>; // Store artifacts per message
   showArtifacts: boolean;
   showPreview: boolean;
   previewArtifacts: CodeArtifact[];
@@ -19,9 +20,10 @@ interface ChatState {
 const initialState: ChatState = {
   messages: [],
   isLoading: false,
-  sessionId: '',
+  sessionId: "",
   currentStreamingMessage: null,
   artifacts: [],
+  messageArtifacts: {}, // Map of message ID to artifacts
   showArtifacts: false,
   showPreview: false,
   previewArtifacts: [],
@@ -30,7 +32,7 @@ const initialState: ChatState = {
 };
 
 const chatSlice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState,
   reducers: {
     initializeSession: (state) => {
@@ -39,17 +41,18 @@ const chatSlice = createSlice({
     addUserMessage: (state, action: PayloadAction<string>) => {
       const userMessage: ChatMessage = {
         id: `user_${Date.now()}`,
-        role: 'user',
+        role: "user",
         content: action.payload,
         timestamp: new Date().toISOString(),
       };
       state.messages.push(userMessage);
     },
-    startStreamingMessage: (state) => {
+    startStreamingMessage: (state, action: PayloadAction<string>) => {
+      const messageId = action.payload;
       const streamingMessage: ChatMessage = {
-        id: `assistant_${Date.now()}`,
-        role: 'assistant',
-        content: '',
+        id: messageId,
+        role: "assistant",
+        content: "",
         timestamp: new Date().toISOString(),
       };
       state.currentStreamingMessage = streamingMessage;
@@ -74,8 +77,25 @@ const chatSlice = createSlice({
     setConnected: (state, action: PayloadAction<boolean>) => {
       state.isConnected = action.payload;
     },
+    addArtifacts: (
+      state,
+      action: PayloadAction<{ messageId: string; artifacts: CodeArtifact[] }>
+    ) => {
+      const { messageId, artifacts } = action.payload;
+
+      // Store artifacts for this specific message
+      if (!state.messageArtifacts[messageId]) {
+        state.messageArtifacts[messageId] = [];
+      }
+      state.messageArtifacts[messageId].push(...artifacts);
+
+      // Add to the main artifacts array (accumulate instead of replace)
+      state.artifacts.push(...artifacts);
+      state.showArtifacts = true;
+    },
     setArtifacts: (state, action: PayloadAction<CodeArtifact[]>) => {
-      state.artifacts = action.payload;
+      // Keep this for backward compatibility, but now it accumulates
+      state.artifacts.push(...action.payload);
       state.showArtifacts = true;
     },
     toggleArtifacts: (state) => {
@@ -93,6 +113,7 @@ const chatSlice = createSlice({
     clearChat: (state) => {
       state.messages = [];
       state.artifacts = [];
+      state.messageArtifacts = {};
       state.showArtifacts = false;
       state.currentStreamingMessage = null;
       state.error = null;
@@ -110,6 +131,7 @@ export const {
   setLoading,
   setError,
   setConnected,
+  addArtifacts,
   setArtifacts,
   toggleArtifacts,
   setShowArtifacts,

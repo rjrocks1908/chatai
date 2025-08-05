@@ -17,6 +17,7 @@ interface ChatAreaProps {
   onToggleArtifacts: () => void;
   onClearChat: () => void;
   onSendMessage: (content: string) => void;
+  onPreviewArtifact?: (artifact: CodeArtifact) => void;
   error: string | null;
 }
 
@@ -31,6 +32,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
   onToggleArtifacts,
   onClearChat,
   onSendMessage,
+  onPreviewArtifact,
   error,
 }) => {
   return (
@@ -57,6 +59,7 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
         messages={messages}
         currentStreamingMessage={currentStreamingMessage}
         isLoading={isLoading}
+        onPreviewArtifact={onPreviewArtifact}
       />
 
       {/* Input */}
