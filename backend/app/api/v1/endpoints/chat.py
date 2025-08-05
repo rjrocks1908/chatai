@@ -1,11 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
-from fastapi.responses import StreamingResponse
-
-from app.schemas import ChatRequest, StreamChunk
 from app.agents.coding_agent import CodingAgent
 from app.core.deps import get_coding_agent
-from app.utils.validators import InputValidator
 from app.core.exceptions import InvalidRequestException
+from app.schemas import ChatRequest, StreamChunk
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 
 router = APIRouter()
 

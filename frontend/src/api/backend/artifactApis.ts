@@ -4,7 +4,7 @@ import backendInstance from "../axios/backend";
 export async function getArtifact(artifactId: string): Promise<CodeArtifact> {
   try {
     const response = await backendInstance.get<CodeArtifact>(
-      `/artifacts/artifacts/${artifactId}`
+      `/artifacts/${artifactId}`
     );
     return response.data;
   } catch (error: unknown) {
@@ -16,7 +16,7 @@ export async function getArtifact(artifactId: string): Promise<CodeArtifact> {
 export async function downloadArtifact(artifactId: string): Promise<Blob> {
   try {
     const response = await backendInstance.get(
-      `/artifacts/artifacts/${artifactId}/download`,
+      `/artifacts/${artifactId}/download`,
       {
         responseType: "blob",
       }
