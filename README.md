@@ -4,7 +4,7 @@ A modern web application that provides an interactive chat interface for AI-powe
 
 ## 🚀 Live Demo
 
-[https://chatai-zocket.vercel.app](https://chatai-zocket.vercel.app)
+[https://chatai-beige.vercel.app](https://chatai-beige.vercel.app)
 
 ## 🏗️ Architecture
 
