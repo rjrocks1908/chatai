@@ -35,7 +35,7 @@ async def chat_stream(
                     is_complete=True,
                     has_artifacts=False,
                 )
-                yield f"data: {error_chunk.json()}\n\n"
+                yield f"data: {error_chunk.model_dump_json()}\n\n"
                 yield "data: [DONE]\n\n"
 
         return StreamingResponse(

@@ -49,6 +49,10 @@ export async function sendMessageStream(
 
           try {
             const chunk: StreamChunk = JSON.parse(data);
+            if (chunk.chunk.includes("Error")) {
+              onError(chunk.chunk);
+              return;
+            }
             onChunk(chunk);
           } catch (e) {
             console.error("Failed to parse chunk:", e);

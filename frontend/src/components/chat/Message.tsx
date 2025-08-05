@@ -89,7 +89,8 @@ export const Message: React.FC<MessageProps> = ({
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeHighlight]}
               components={{
-                code({ inline, className, children, ...props }) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                code({ inline, className, children, ...props }: any) {
                   const match = /language-(\w+)/.exec(className || "");
                   return !inline && match ? (
                     <pre className="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto">

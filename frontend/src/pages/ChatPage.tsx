@@ -94,6 +94,7 @@ export const ChatPage: React.FC = () => {
         (error: string) => {
           dispatch(setError(error));
           dispatch(setLoading(false));
+          dispatch(completeStreamingMessage());
         }
       );
     } catch (err) {
