@@ -1,287 +1,131 @@
-# AI Coding Agent Backend
+# ChatAI - AI-Powered Code Generation Chat Application
 
-A FastAPI-based backend for a Claude-style AI coding agent using Google's Gemini 2.5 API and LangGraph for orchestration.
+A modern web application that provides an interactive chat interface for AI-powered code generation, featuring real-time streaming responses, code artifact management, and a beautiful user interface.
 
-## Features
+## 🚀 Live Demo
 
-- **Streaming Chat API** - Real-time conversation with AI agent
-- **Code Artifact Management** - Extract, store, and manage generated code
-- **Memory Management** - Short-term conversation memory using LangGraph
-- **WebSocket Support** - Real-time bidirectional communication
-- **Code Validation** - Syntax validation and security checks
-- **File Downloads** - Download generated code as files
-- **Session Management** - Persistent conversation sessions
+[https://chatai-zocket.vercel.app](https://chatai-zocket.vercel.app)
 
-## Architecture
+## 🏗️ Architecture
 
-### Core Components
+This application follows a modern full-stack architecture:
 
-- **FastAPI** - Modern, fast web framework
-- **LangGraph** - Agent orchestration and memory management
-- **Gemini 2.5** - Google's language model (free tier)
-- **Pydantic** - Data validation and serialization
+- **Frontend**: React + TypeScript + Vite + Redux Toolkit + Tailwind CSS
+- **Backend**: FastAPI + Python + Gemini AI API
+- **Real-time Communication**: Server-Sent Events (SSE) for streaming responses
+- **State Management**: Redux Toolkit for predictable state management
+- **Styling**: Tailwind CSS for responsive and modern UI
 
-### Project Structure
+## 🛠️ Setup Instructions
 
-```
-backend/
-├── app/
-│   ├── agents/          # LangGraph agents and prompts
-│   ├── api/             # REST API endpoints
-│   ├── config/          # Configuration management
-│   ├── core/            # Core utilities and dependencies
-│   ├── models/          # Pydantic data models
-│   ├── services/        # Business logic services
-│   └── utils/           # Utility functions
-├── tests/               # Test suite
-├── requirements.txt     # Python dependencies
-└── .env.example        # Environment variables template
-```
+### Prerequisites
 
-## Setup Instructions
+- Node.js (v18 or higher)
+- Python (v3.8 or higher)
+- Git
 
-### 1. Prerequisites
+### Backend Setup
 
-- Python 3.9+
-- Google AI API key (Gemini 2.5)
-
-### 2. Installation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/rjrocks1908/chatai.git
+   cd chatai/backend
+   ```
 
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd backend
+2. **Create and activate virtual environment**
+   ```bash
+   python -m venv venv
+   # On Windows
+   venv\Scripts\activate
+   # On macOS/Linux
+   source venv/bin/activate
+   ```
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 3. Configuration
-
-```bash
-# Copy environment template
-cp .env.example .env
-
-# Edit .env file with your configuration
-GOOGLE_API_KEY=your_gemini_api_key_here
-DEBUG=True
-ALLOWED_ORIGINS=["http://localhost:3000", "http://127.0.0.1:3000"]
-```
-
-### 4. Running the Application
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-# Development mode
-python -m app.main
+4. **Set up environment variables**
+   Create a `.env` file in the backend directory with the variables mentioned in the `.env.example` file.
 
-# Or using uvicorn directly
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+5. **Run the backend server**
+   ```bash
+   python main.py
+   ```
+   The backend will be available at `http://localhost:8000`
 
-The API will be available at:
-- **API Base**: http://localhost:8000
-- **Documentation**: http://localhost:8000/docs
-- **Health Check**: http://localhost:8000/health
+### Frontend Setup
 
-## API Endpoints
+1. **Navigate to frontend directory**
+   ```bash
+   cd ../frontend
+   ```
 
-### Chat Endpoints
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-- `POST /api/v1/chat/chat` - Send message (non-streaming)
-- `POST /api/v1/chat/stream` - Send message (streaming)
-- `WS /api/v1/chat/ws/{session_id}` - WebSocket chat
-- `GET /api/v1/chat/sessions/{session_id}/history` - Get conversation history
-- `DELETE /api/v1/chat/sessions/{session_id}` - Clear session
-- `GET /api/v1/chat/sessions/{session_id}/stats` - Get session statistics
+3. **Set up environment variables**
+   Create a `.env` file in the frontend directory with the variables mentioned in the `.env.example` file.
 
-### Artifact Endpoints
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+   The frontend will be available at `http://localhost:5173`
 
-- `GET /api/v1/artifacts/artifacts/{artifact_id}` - Get specific artifact
-- `GET /api/v1/artifacts/sessions/{session_id}/artifacts` - Get session artifacts
-- `GET /api/v1/artifacts/messages/{message_id}/artifacts` - Get message artifacts
-- `GET /api/v1/artifacts/artifacts/{artifact_id}/download` - Download artifact
-- `GET /api/v1/artifacts/artifacts/{artifact_id}/preview` - Preview artifact
-- `PUT /api/v1/artifacts/artifacts/{artifact_id}` - Update artifact
-- `DELETE /api/v1/artifacts/artifacts/{artifact_id}` - Delete artifact
-- `POST /api/v1/artifacts/artifacts/{artifact_id}/validate` - Validate artifact
+### Running the Complete Application
 
-## Usage Examples
+1. Start the backend server (from backend directory)
+2. Start the frontend development server (from frontend directory)
+3. Open `http://localhost:5173` in your browser
 
-### Send a Chat Message
+## 🎯 How I Approached the Problem
 
-```python
-import requests
+### 1. **Project Planning & Architecture Design**
+I approached this AI-powered chat application with a systematic methodology:
 
-response = requests.post("http://localhost:8000/api/v1/chat/chat", json={
-    "message": "Create a React component for a todo list",
-    "session_id": "my-session-123",
-    "stream": False
-})
+- **Requirements Analysis**: Identified core features (real-time chat, code generation, artifact management)
+- **Technology Stack Selection**: Chose modern, scalable technologies (React + FastAPI + Gemini AI)
+- **Architecture Planning**: Designed a decoupled frontend-backend architecture with clear separation of concerns
+- **User Experience Design**: Prioritized intuitive interactions and clean UI
 
-print(response.json())
-```
+### 2. **Development Methodology**
+I followed an iterative development approach:
 
-### Stream a Response
+- **Bottom-up approach**: Started with core features and then added advanced features
+- **Component-Driven Development**: Built reusable UI components with clear interfaces
+- **State Management Strategy**: Implemented Redux Toolkit for predictable state management
+- **API-First Design**: Designed RESTful APIs before implementing frontend features
 
-```python
-import requests
+### 3. **Key Technical Decisions**
 
-response = requests.post(
-    "http://localhost:8000/api/v1/chat/stream",
-    json={
-        "message": "Write a Python function to calculate fibonacci numbers",
-        "session_id": "my-session-123"
-    },
-    stream=True
-)
+#### **State Management Architecture**
+- **Redux Toolkit**: Chose for state management
 
-for line in response.iter_lines():
-    if line.startswith(b"data: "):
-        data = line[6:]  # Remove "data: " prefix
-        if data != b"[DONE]":
-            print(data.decode())
-```
+#### **Real-time Communication**
+- **Server-Sent Events (SSE)**: Implemented for streaming responses
+- **Chunked responses**: Handled partial content updates
 
-### WebSocket Chat
+#### **Code Artifact Management**
+- **Message-artifact association**: Linked artifacts to specific messages
+- **File download system**: Implemented client-side file generation
+- **Preview functionality**: Real-time code preview with syntax highlighting
 
-```javascript
-const ws = new WebSocket("ws://localhost:8000/api/v1/chat/ws/my-session-123");
+#### **UI/UX Design**
+- **Loading states**: Smooth transitions and skeleton loaders
+- **Error handling**: User-friendly error messages and recovery options
 
-ws.onopen = () => {
-    ws.send(JSON.stringify({
-        type: "message",
-        message: "Hello, can you help me with coding?"
-    }));
-};
+### 4. **Code Quality & Best Practices**
 
-ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    console.log(data);
-};
-```
+#### **TypeScript Implementation**
+- **Interface segregation**: Clean separation of concerns
+- **Type safety**: Compile-time error checking
 
-## Key Features
 
-### 1. LangGraph Integration
-
-The agent uses LangGraph for:
-- **Memory Management** - Maintains conversation context
-- **Workflow Orchestration** - Structured request processing
-- **State Management** - Persistent session state
-
-### 2. Code Artifact System
-
-Automatically extracts and manages code from AI responses:
-- **Language Detection** - Identifies programming languages
-- **Syntax Highlighting** - Proper code formatting
-- **Validation** - Basic syntax and security checks
-- **Preview Generation** - Runnable HTML previews for web code
-
-### 3. Streaming Responses
-
-Supports real-time streaming for better user experience:
-- **Server-Sent Events** - HTTP streaming
-- **WebSocket** - Bidirectional real-time communication
-- **Chunked Processing** - Progressive response building
-
-### 4. Security Features
-
-- **Input Validation** - Comprehensive request validation
-- **Content Sanitization** - Clean user inputs
-- **Code Security Checks** - Basic security pattern detection
-- **CORS Configuration** - Secure cross-origin requests
-
-## Development
-
-### Running Tests
-
-```bash
-# Install test dependencies
-pip install pytest pytest-asyncio
-
-# Run tests
-pytest tests/ -v
-```
-
-### Code Quality
-
-```bash
-# Format code
-black app/ tests/
-
-# Sort imports
-isort app/ tests/
-
-# Type checking (optional)
-mypy app/
-```
-
-### Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `GOOGLE_API_KEY` | Gemini API key | Required |
-| `DEBUG` | Debug mode | `False` |
-| `HOST` | Server host | `0.0.0.0` |
-| `PORT` | Server port | `8000` |
-| `ALLOWED_ORIGINS` | CORS origins | `["http://localhost:3000"]` |
-| `MAX_CONVERSATION_HISTORY` | Memory limit | `50` |
-
-## Deployment
-
-### Using Docker (Optional)
-
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-COPY . .
-EXPOSE 8000
-
-CMD ["python", "-m", "app.main"]
-```
-
-### Using Render/Railway/Heroku
-
-1. Set environment variables in your platform
-2. Use `python -m app.main` as the start command
-3. Ensure `PORT` environment variable is set correctly
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Gemini API Key Invalid**
-   - Verify your API key is correct
-   - Check API key has proper permissions
-
-2. **CORS Errors**
-   - Add your frontend URL to `ALLOWED_ORIGINS`
-   - Ensure proper HTTP methods are allowed
-
-3. **Memory Issues**
-   - Adjust `MAX_CONVERSATION_HISTORY` setting
-   - Clear old sessions periodically
-
-4. **Streaming Not Working**
-   - Check client supports Server-Sent Events
-   - Verify WebSocket connections
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
+#### **Error Handling**
+- **Graceful degradation**: Fallback mechanisms for API failures
+- **User feedback**: Clear error messages and recovery options
+- **Logging**: Comprehensive error logging for debugging

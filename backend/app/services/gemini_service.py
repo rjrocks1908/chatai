@@ -5,6 +5,7 @@ import google.generativeai as genai
 from app.config.settings import get_settings
 from app.core.exceptions import GeminiAPIException
 from app.schemas import ChatMessage, MessageRole
+from app.agents.prompts import get_system_prompt
 
 
 class GeminiService:
@@ -24,6 +25,7 @@ class GeminiService:
         self.model = genai.GenerativeModel(
             model_name=self.settings.gemini_model,
             generation_config=self.generation_config,
+            system_instruction=get_system_prompt(),
         )
 
     def _prepare_history(self, messages: List[ChatMessage]) -> List[Dict[str, Any]]:
